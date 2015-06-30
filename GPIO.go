@@ -1,9 +1,9 @@
-package main
+package BeagleBone-GPIO-Go
 
-import (
+/*import (
 	"fmt"
-	//"os"
-)
+	"os"
+)*/
 
 type BB_GPIO struct{
 	pin [][]int //pin name ex.P8_13 pin[8][13]
