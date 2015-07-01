@@ -16,6 +16,8 @@ const (
 	OUTPUT = 1
 	INPUT = 2
 	NONE = 0
+	HIGH = 1
+	LOW = 0
 )
 
 var mode = map[int]string{
