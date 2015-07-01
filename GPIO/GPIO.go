@@ -53,7 +53,7 @@ func (gpio *BB_GPIO) Pin(fir int, sec int) (func() (int,map[int]int,error)){
 		2:sec,
 	}
 	return func() (int,map[int]int,error){
-		if v==0 || v >= 123 || Pin[1]<8 || Pin[1]>10 || Pin[2]>47 { //exception exclude
+		if v==0 || v >= 123 { //exception exclude
 			gpio.check = 1
 			return v,Pin,gpio
 		}
