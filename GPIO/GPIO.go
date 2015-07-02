@@ -126,7 +126,7 @@ func (gpio *BB_GPIO) Error() string {
 }
 
 func (gpio *BB_GPIO) Close(){
-        unexport,err := os.OpenFile("/sys/class/gpio/unexport",O_WRONLY | O_APPEND,0200)
+        unexport,err := os.OpenFile("/sys/class/gpio/unexport",os.O_WRONLY | os.O_APPEND,0200)
         if err!=nil{
                 return err
         }
