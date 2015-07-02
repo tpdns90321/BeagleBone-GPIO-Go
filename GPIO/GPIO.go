@@ -124,3 +124,17 @@ func (gpio *BB_GPIO) Error() string {
         }
         return ""
 }
+
+func (gpio *BB_GPIO) Close(){
+        unexport,err := os.OpenFile("/sys/class/gpio/unexport")
+        if err!=nil{
+                return err
+        }
+        for i:=8;i<10;i++{
+                for _,v := range gpio.pin_state[i]{
+                        if v != 0{
+                                fmt.Fprintf(unexport,fmt.Sprintf("%d",v))
+                        }
+                }
+        }
+}
