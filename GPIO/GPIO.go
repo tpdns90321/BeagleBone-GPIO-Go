@@ -84,14 +84,14 @@ func (gpio *BB_GPIO) PinMode(data *pin_data, mode_pin int) error {
         if err != nil {
                 return err
         }
-        fmt.Fprintf(export, fmt.Sprintf("%d",data.num_pin))
+        fmt.Fprintf(export, "%d",data.num_pin)
         defer export.Close()
 
         direction, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", data.num_pin),os.O_WRONLY,0311)
         if err != nil {
                 return err
         }
-        fmt.Fprintf(direction, fmt.Sprintf("%s", mode[mode_pin]))
+        fmt.Fprintf(direction, "%s", mode[mode_pin])
         defer direction.Close()
 
         gpio.pin_state[data.beagle_pin[0]][data.beagle_pin[1]] = byte(mode_pin)
@@ -133,7 +133,7 @@ func (gpio *BB_GPIO) Close() error{
         for i:=8;i<10;i++{
                 for v := range gpio.pin_state[i]{
                         if v != 0{
-                                fmt.Fprintf(unexport,fmt.Sprintf("%d\n",v))
+                                fmt.Fprintf(unexport,"%d\n",v)
                         }
                 }
         }
