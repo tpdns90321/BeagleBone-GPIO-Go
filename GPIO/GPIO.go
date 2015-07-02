@@ -80,14 +80,14 @@ func (gpio *BB_GPIO) PinMode(data *pin_data, mode_pin int) error {
                 return gpio
         }
 
-        export, err := os.Create("/sys/class/gpio/export")
+        export, err := os.OpenFile("/sys/class/gpio/export",os.WRONLY,0200)
         if err != nil {
                 return err
         }
         fmt.Fprintf(export, string(data.num_pin))
         defer export.Close()
 
-        direction, err := os.Create(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", data.num_pin))
+        direction, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", data.num_pin),os.O_WRONLY,0200)
         if err != nil {
                 return err
         }
@@ -107,7 +107,7 @@ func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
                 gpio.check = 1
                 return gpio
         }
-        value, err := os.Create(fmt.Sprintf("/sys/class/gpio/gpio%d/value", data.num_pin))
+        value, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/value", data.num_pin),os.O_WRONLY,0200)
         if err == nil {
                 return err
         }
