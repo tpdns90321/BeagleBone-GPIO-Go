@@ -34,7 +34,7 @@ var mode = map[int]string{
 
 var siginal = map[int]string{
         0: "low",
-        1: "high"
+        1: "high",
 }
 
 //pin allocate
