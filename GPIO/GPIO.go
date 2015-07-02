@@ -84,7 +84,7 @@ func (gpio *BB_GPIO) PinMode(data *pin_data, mode_pin int) error {
         if err != nil {
                 return err
         }
-        fmt.Fprintf(export, string(data.num_pin))
+        fmt.Fprintf(export, fmt.Sprintf("%d",data.num_pin))
         defer export.Close()
 
         direction, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", data.num_pin),os.O_WRONLY,0311)
