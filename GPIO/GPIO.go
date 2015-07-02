@@ -80,7 +80,7 @@ func (gpio *BB_GPIO) PinMode(data *pin_data, mode_pin int) error {
                 return gpio
         }
 
-        export, err := os.OpenFile("/sys/class/gpio/export",os.WRONLY,0200)
+        export, err := os.OpenFile("/sys/class/gpio/export",os.O_WRONLY,0200)
         if err != nil {
                 return err
         }
