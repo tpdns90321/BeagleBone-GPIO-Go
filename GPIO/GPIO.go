@@ -131,7 +131,7 @@ func (gpio *BB_GPIO) Close() error{
                 return err
         }
         for i:=8;i<10;i++{
-                for _,v := range gpio.pin_state[i]{
+                for v := range gpio.pin_state[i]{
                         if v != 0{
                                 fmt.Fprintf(unexport,fmt.Sprintf("%d\n",v))
                         }
