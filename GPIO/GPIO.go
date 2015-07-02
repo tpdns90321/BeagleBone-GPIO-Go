@@ -137,4 +137,5 @@ func (gpio *BB_GPIO) Close(){
                         }
                 }
         }
+        return
 }
