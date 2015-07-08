@@ -92,7 +92,7 @@ func (gpio *BB_GPIO) PinMode(data *pin_data, mode_pin int) error {
         return nil
 }
 
-var signal map[int]string{
+var signal = map[int]string{
         1:"high",
         0:"low",
 }
