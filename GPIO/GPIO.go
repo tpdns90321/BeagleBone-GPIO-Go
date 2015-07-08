@@ -112,7 +112,7 @@ func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
         }
         defer value.Close()
 
-        fmt.Fprintf(value,"%s",signal[on])
+        fmt.Fprintf(value,signal[on])
 
         return nil
 }
