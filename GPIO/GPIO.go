@@ -109,7 +109,7 @@ func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
                 return gpio
         }
 
-        value,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", data.num_pin),os.O_WRONLY,0311)
+        value,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", data.num_pin),os.O_RDWR,0311)
         if err!=nil {
                 return err
         }
@@ -120,7 +120,7 @@ func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
         w := bufio.NewWriter(value)
 
         io.Copy(w,SR)
-        
+
         w.Flush()
 
         return nil
