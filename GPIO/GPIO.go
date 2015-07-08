@@ -32,11 +32,6 @@ var mode = map[int]string{
         2: "in",
 }
 
-var siginal = map[int]string{
-        0: "low",
-        1: "high",
-}
-
 //pin allocate
 var pin_map = map[int][]int{
         8: []int{0, 0, 0, 38, 39, 34, 35, 66, 67, 69, 68, 45, 44, 23, 26, 47, 46, 27, 65, 22, 63, 62, 37, 36, 33, 32, 61, 86, 88, 87, 89, 10, 11, 9, 81, 8, 80, 78, 79, 76, 77, 74, 75, 72, 73, 70, 71},
@@ -92,33 +87,33 @@ func (gpio *BB_GPIO) PinMode(data *pin_data, mode_pin int) error {
         fmt.Fprintf(export, "%d",data.num_pin)
         defer export.Close()
 
-        direction, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", data.num_pin),os.O_WRONLY,0311)
-        if err != nil {
-                return err
-        }
-        fmt.Fprintf(direction, "%s", mode[mode_pin])
-        defer direction.Close()
-
         gpio.pin_state[data.beagle_pin[0]][data.beagle_pin[1]] = byte(mode_pin)
 
         return nil
+}
+
+var signal map[int]string{
+        1:"high",
+        0:"low",
 }
 
 //GPIO on/off
 func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
         if data != nil {
                 return gpio
-        }
-        if gpio.pin_state[data.beagle_pin[0]][data.beagle_pin[1]] != 1 {
+        }else if gpio.pin_state[data.beagle_pin[0]][data.beagle_pin[1]] != 1{
                 gpio.check = 1
                 return gpio
         }
-        direction, err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", data.num_pin),os.O_WRONLY,0311)
-        if err == nil {
+
+        value,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction",data.num_pin),os.O_WRONLY,0200)
+        if err!=nil {
                 return err
         }
-        fmt.Fprintf(direction, "%s", siginal[on])
-        direction.Close()
+        defer value.Close()
+
+        fmt.Fprintf("%s",signal[on])
+
         return nil
 }
 
@@ -136,6 +131,7 @@ func (gpio *BB_GPIO) Close() error{
         if err!=nil{
                 return err
         }
+        defer unexport.Close()
         for i:=8;i<10;i++{
                 for v := range gpio.pin_state[i]{
                         if v != 0{
