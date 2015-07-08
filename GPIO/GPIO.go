@@ -3,6 +3,8 @@ package BeagleBone_GPIO
 import (
         "fmt"
         "os"
+        "io"
+        "strings"
 )
 
 type BB_GPIO struct {
@@ -106,13 +108,14 @@ func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
                 return gpio
         }
 
-        value,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction",data.num_pin),os.O_WRONLY | os.O_APPEND,0311)
+        value,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction", data.num_pin),os.O_WRONLY,0311)
         if err!=nil {
                 return err
         }
         defer value.Close()
 
-        fmt.Fprintf(value,signal[on])
+        SR := strings.NewReader(signal[on])
+        io.Copy(value,SR)
 
         return nil
 }
