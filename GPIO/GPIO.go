@@ -3,9 +3,9 @@ package BeagleBone_GPIO
 import (
         "fmt"
         "os"
-        "io"
         "strings"
         "bufio"
+        "io"
 )
 
 type BB_GPIO struct {
@@ -119,7 +119,8 @@ func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
 
         w := bufio.NewWriter(value)
 
-        w.ReadFrom(SR)
+        io.Copy(w,SR)
+        
         w.Flush()
 
         return nil
