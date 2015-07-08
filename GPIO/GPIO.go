@@ -3,9 +3,6 @@ package BeagleBone_GPIO
 import (
         "fmt"
         "os"
-        "strings"
-        "bufio"
-        "io"
 )
 
 type BB_GPIO struct {
@@ -61,7 +58,7 @@ func BB_GPIO_Start() (gpio *BB_GPIO) {
 }
 
 //pin_data return function, and it's error check
-func (gpio *BB_GPIO) Pin(fir int, sec int) (data *pin_data) {
+func (gpio *BB_GPIO) Pin(fir, sec int) (data *pin_data) {
         data = new(pin_data)
         data.num_pin = gpio.pin[fir][sec]
         if data.num_pin == 0 || data.num_pin > 123 {
@@ -102,9 +99,9 @@ var signal = map[int]string{
 
 //GPIO on/off
 func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
-        if data != nil {
+        if data == nil {
                 return gpio
-        }else if gpio.pin_state[data.beagle_pin[0]][data.beagle_pin[1]] != 1{
+        }else if gpio.pin_state[data.beagle_pin[0]][data.beagle_pin[1]]!=1{
                 gpio.check = 1
                 return gpio
         }
@@ -115,13 +112,7 @@ func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
         }
         defer value.Close()
 
-        SR := strings.NewReader(signal[on])
-
-        w := bufio.NewWriter(value)
-
-        io.Copy(w,SR)
-
-        w.Flush()
+        fmt.Fprintf(value,signal[on])
 
         return nil
 }
