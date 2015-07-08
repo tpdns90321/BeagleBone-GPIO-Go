@@ -5,6 +5,7 @@ import (
         "os"
         "io"
         "strings"
+        "bufio"
 )
 
 type BB_GPIO struct {
@@ -115,7 +116,11 @@ func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
         defer value.Close()
 
         SR := strings.NewReader(signal[on])
-        io.Copy(value,SR)
+
+        w := bufio.NewWriter(value)
+
+        w.ReadFrom(SR)
+        w.Flush()
 
         return nil
 }
