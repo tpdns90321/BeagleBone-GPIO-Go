@@ -137,7 +137,7 @@ func (gpio *BB_GPIO) DigitalRead(pin *pin_data) (data int,err error){
                 return -1,gpio
         }
 
-        value,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/value",data.num_pin),os.O_RDONLY,0311)
+        value,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/value",pin.num_pin),os.O_RDONLY,0311)
         if err != nil{
                 return -1,err
         }
