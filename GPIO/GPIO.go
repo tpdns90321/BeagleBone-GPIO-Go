@@ -84,8 +84,18 @@ func (gpio *BB_GPIO) PinMode(data *pin_data, mode_pin int) error {
         if err != nil {
                 return err
         }
-        fmt.Fprintf(export, "%d",data.num_pin)
+
         defer export.Close()
+        fmt.Fprintf(export, "%d",data.num_pin)
+
+        direction,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/direction",data.num_pin),os.O_WRONLY,0311)
+        if err != nil {
+                gpio.check=1
+                return err
+        }
+        defer direction.Close()
+
+        fmt.Fprintf(direction,"%s",mode[mode_pin])
 
         gpio.pin_state[data.beagle_pin[0]][data.beagle_pin[1]] = byte(mode_pin)
 
@@ -117,6 +127,26 @@ func (gpio *BB_GPIO) DigitalWrite(data *pin_data, on int) error {
         return nil
 }
 
+//read GPIO pin's bit
+func (gpio *BB_GPIO) DigitalRead(pin *pin_data) (data int,err error){
+        if pin == nil{
+                return -1,gpio
+        }else if gpio.pin_state[pin.beagle_pin[0]][pin.beagle_pin[1]] != 2{
+                gpio.check = 1
+                return -1,gpio
+        }
+
+        value,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/value"),os.O_RDONLY,0311)
+        if err != nil{
+                return -1,err
+        }
+        read := make([]byte,1,2)
+        value.Read(read)
+        data = int(read[0]-48)
+        err = nil
+        return
+}
+
 //for error return
 func (gpio *BB_GPIO) Error() string {
         switch gpio.check {
@@ -126,6 +156,7 @@ func (gpio *BB_GPIO) Error() string {
         return ""
 }
 
+//cleanup pin settings
 func (gpio *BB_GPIO) Close() error{
         unexport,err := os.OpenFile("/sys/class/gpio/unexport",os.O_WRONLY | os.O_APPEND,0200)
         if err!=nil{
