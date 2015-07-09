@@ -38,6 +38,7 @@ var pin_map = map[int][]int{
         9: []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 60, 31, 50, 48, 51, 5, 4, 0, 0, 3, 2, 49, 15, 117, 14, 115, 123, 121, 122, 120, 0, 0, 0, 0, 0, 0, 0, 0, 20, 7, 0, 0, 0, 0},
 }
 
+//pin numbers initialize
 func BB_GPIO_Start() (gpio *BB_GPIO) {
         gpio = new(BB_GPIO)
         gpio.pin = make([][]int, 10)
@@ -136,7 +137,7 @@ func (gpio *BB_GPIO) DigitalRead(pin *pin_data) (data int,err error){
                 return -1,gpio
         }
 
-        value,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/value"),os.O_RDONLY,0311)
+        value,err := os.OpenFile(fmt.Sprintf("/sys/class/gpio/gpio%d/value",data.num_pin),os.O_RDONLY,0311)
         if err != nil{
                 return -1,err
         }
