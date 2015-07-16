@@ -62,7 +62,7 @@ func BB_GPIO_Start() (gpio *BB_GPIO) {
 func (gpio *BB_GPIO) Pin(fir, sec int) (data *pin_data) {
         data = new(pin_data)
         data.num_pin = gpio.pin[fir][sec]
-        if data.num_pin == 0 || data.num_pin > 123 {
+        if data.num_pin == 0 || data.num_pin > 123 || data.num_pin == nil {
                 gpio.check = 1
                 return nil
         }
