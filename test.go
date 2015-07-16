@@ -8,16 +8,17 @@ import (
 )
 
 func main(){
-	test := B.BB_GPIO_Start()
-	defer test.Close()
-	if err := test.PinMode(test.Pin(9,13),B.OUTPUT);err!=nil{
+	gpio := B.BB_GPIO_Start()
+	defer gpio.Close()
+	led := gpio.Pin(9,13)
+	if err := gpio.PinMode(led,B.OUTPUT);err!=nil{
 		fmt.Println(err)
 		os.Exit(1)
 	}
 	for i:=0;i<10;i++{
-		test.DigitalWrite(test.Pin(9,13),B.LOW)
+		gpio.DigitalWrite(led,B.LOW)
 		time.Sleep(time.Second)
-		test.DigitalWrite(test.Pin(9,13),B.HIGH)
+		gpio.DigitalWrite(led,B.HIGH)
 		time.Sleep(time.Second)
 	}
 }
